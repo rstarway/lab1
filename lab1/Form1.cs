@@ -22,81 +22,45 @@ namespace lab1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox3.Text) || string.IsNullOrWhiteSpace(textBox4.Text))
+            RecordForm f = new RecordForm();
+            if (f.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Заполни все поля");
-                return;
+                if (logic.Add(f.name, f.age, f.date, f.cause, f.cell))
+                    Fill(logic.GetAll());
+                else
+                    MessageBox.Show("Камера занята или нет такой (1-" + logic.cells + ")");
             }
-
-            int age;
-            if (!int.TryParse(textBox2.Text, out age) || age < 0 || age > 120)
-            {
-                MessageBox.Show("Возраст должен быть числом от 0 до 120");
-                return;
-            }
-            int cell;
-            if (!int.TryParse(textBox4.Text, out cell))
-            {
-                MessageBox.Show("Камера должна быть числом");
-                return;
-            }
-
-            string name = textBox1.Text.Trim();
-            DateTime date = dateTimePicker1.Value.Date;
-            string cause = textBox3.Text.Trim();
-
-            if (logic.Add(name, age, date, cause, cell))
-            {
-                Fill(logic.GetAll());
-                MessageBox.Show("Добавлено");
-            }
-            else
-                MessageBox.Show("Камера занята или нет такой (1-" + logic.cells + ")");
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (textBox5.Text == "")
+            if (dataGridView1.CurrentRow == null)
             {
                 MessageBox.Show("Выбери запись в таблице");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox3.Text) || string.IsNullOrWhiteSpace(textBox4.Text))
+
+            int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells[0].Value);
+            Record r = null;
+            foreach (Record x in logic.GetAll())
             {
-                MessageBox.Show("Заполни все поля");
-                return;
+                if (x.Id == id)
+                    r = x;
             }
 
-            int age;
-            if (!int.TryParse(textBox2.Text, out age) || age < 0 || age > 120)
+            RecordForm f = new RecordForm(r);
+            if (f.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Возраст должен быть числом от 0 до 120");
-                return;
+                if (logic.Edit(id, f.name, f.age, f.date, f.cause, f.cell))
+                    Fill(logic.GetAll());
+                else
+                    MessageBox.Show("Не получилось, проверь камеру");
             }
-            int cell;
-            if (!int.TryParse(textBox4.Text, out cell))
-            {
-                MessageBox.Show("Камера должна быть числом");
-                return;
-            }
-
-            int id = Convert.ToInt32(textBox5.Text);
-            string name = textBox1.Text.Trim();
-            DateTime date = dateTimePicker1.Value.Date;
-            string cause = textBox3.Text.Trim();
-
-            if (logic.Edit(id, name, age, date, cause, cell))
-            {
-                Fill(logic.GetAll());
-                MessageBox.Show("Изменено");
-            }
-            else
-                MessageBox.Show("Не получилось, проверь камеру");
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (textBox5.Text == "")
+            if (dataGridView1.CurrentRow == null)
             {
                 MessageBox.Show("Выбери запись в таблице");
                 return;
@@ -104,21 +68,9 @@ namespace lab1
 
             if (MessageBox.Show("Точно удалить?", "Удаление", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                logic.Delete(Convert.ToInt32(textBox5.Text));
+                logic.Delete(Convert.ToInt32(dataGridView1.CurrentRow.Cells[0].Value));
                 Fill(logic.GetAll());
-                textBox5.Text = "";
             }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            // сброс
-            textBox1.Text = "";
-            textBox2.Text = "";
-            textBox3.Text = "";
-            textBox4.Text = "";
-            textBox5.Text = "";
-            dateTimePicker1.Value = DateTime.Now;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -140,20 +92,6 @@ namespace lab1
             List<int> busy = logic.BusyCells();
             List<int> free = logic.FreeCells();
             label8.Text = "Занято: " + busy.Count + " (" + string.Join(", ", busy) + ")\nСвободно: " + free.Count + " (" + string.Join(", ", free) + ")";
-        }
-
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0)
-                return;
-
-            DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-            textBox5.Text = row.Cells[0].Value.ToString();
-            textBox1.Text = row.Cells[1].Value.ToString();
-            textBox2.Text = row.Cells[2].Value.ToString();
-            dateTimePicker1.Value = DateTime.Parse(row.Cells[3].Value.ToString());
-            textBox3.Text = row.Cells[4].Value.ToString();
-            textBox4.Text = row.Cells[5].Value.ToString();
         }
     }
 }
