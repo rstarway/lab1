@@ -15,23 +15,48 @@ while (true)
     Console.Write("> ");
     string s = Console.ReadLine();
 
-    if (s == "0")
+    if (s == null || s == "0")
         break;
 
-    switch (s)
+    switch (s.Trim())
     {
         case "1":
             Console.Write("ФИО: ");
             string name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("ФИО не может быть пустым");
+                break;
+            }
             Console.Write("Возраст: ");
-            int age = int.Parse(Console.ReadLine());
+            int age;
+            if (!int.TryParse(Console.ReadLine(), out age) || age < 0 || age > 120)
+            {
+                Console.WriteLine("Возраст должен быть числом от 0 до 120");
+                break;
+            }
             Console.Write("Дата (дд.мм.гггг): ");
-            DateTime date = DateTime.Parse(Console.ReadLine());
+            DateTime date;
+            if (!DateTime.TryParse(Console.ReadLine(), out date))
+            {
+                Console.WriteLine("Неправильная дата");
+                break;
+            }
             Console.Write("Причина смерти: ");
             string cause = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(cause))
+            {
+                Console.WriteLine("Причина не может быть пустой");
+                break;
+            }
             Console.Write("Камера (1-" + logic.cells + "): ");
-            int cell = int.Parse(Console.ReadLine());
-            if (logic.Add(name, age, date, cause, cell))
+            int cell;
+            if (!int.TryParse(Console.ReadLine(), out cell))
+            {
+                Console.WriteLine("Камера должна быть числом");
+                break;
+            }
+            if (logic.Add(name.Trim(), age, date, cause.Trim(), cell))
                 Console.WriteLine("Добавлено");
             else
                 Console.WriteLine("Камера занята или нет такой");
@@ -47,18 +72,48 @@ while (true)
 
         case "3":
             Console.Write("id: ");
-            int id = int.Parse(Console.ReadLine());
+            int id;
+            if (!int.TryParse(Console.ReadLine(), out id))
+            {
+                Console.WriteLine("id должен быть числом");
+                break;
+            }
             Console.Write("ФИО: ");
             string name2 = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name2))
+            {
+                Console.WriteLine("ФИО не может быть пустым");
+                break;
+            }
             Console.Write("Возраст: ");
-            int age2 = int.Parse(Console.ReadLine());
+            int age2;
+            if (!int.TryParse(Console.ReadLine(), out age2) || age2 < 0 || age2 > 120)
+            {
+                Console.WriteLine("Возраст должен быть числом от 0 до 120");
+                break;
+            }
             Console.Write("Дата (дд.мм.гггг): ");
-            DateTime date2 = DateTime.Parse(Console.ReadLine());
+            DateTime date2;
+            if (!DateTime.TryParse(Console.ReadLine(), out date2))
+            {
+                Console.WriteLine("Неправильная дата");
+                break;
+            }
             Console.Write("Причина смерти: ");
             string cause2 = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(cause2))
+            {
+                Console.WriteLine("Причина не может быть пустой");
+                break;
+            }
             Console.Write("Камера: ");
-            int cell2 = int.Parse(Console.ReadLine());
-            if (logic.Edit(id, name2, age2, date2, cause2, cell2))
+            int cell2;
+            if (!int.TryParse(Console.ReadLine(), out cell2))
+            {
+                Console.WriteLine("Камера должна быть числом");
+                break;
+            }
+            if (logic.Edit(id, name2.Trim(), age2, date2, cause2.Trim(), cell2))
                 Console.WriteLine("Изменено");
             else
                 Console.WriteLine("Не получилось");
@@ -66,7 +121,12 @@ while (true)
 
         case "4":
             Console.Write("id: ");
-            int id2 = int.Parse(Console.ReadLine());
+            int id2;
+            if (!int.TryParse(Console.ReadLine(), out id2))
+            {
+                Console.WriteLine("id должен быть числом");
+                break;
+            }
             if (logic.Delete(id2))
                 Console.WriteLine("Удалено");
             else
@@ -76,7 +136,9 @@ while (true)
         case "5":
             Console.Write("Причина: ");
             string str = Console.ReadLine();
-            List<Record> res = logic.FindByCause(str);
+            if (str == null)
+                str = "";
+            List<Record> res = logic.FindByCause(str.Trim());
             if (res.Count == 0)
                 Console.WriteLine("Ничего не найдено");
             foreach (Record r in res)

@@ -22,17 +22,28 @@ namespace lab1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "" || textBox4.Text == "")
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox3.Text) || string.IsNullOrWhiteSpace(textBox4.Text))
             {
                 MessageBox.Show("Заполни все поля");
                 return;
             }
 
-            string name = textBox1.Text;
-            int age = Convert.ToInt32(textBox2.Text);
+            int age;
+            if (!int.TryParse(textBox2.Text, out age) || age < 0 || age > 120)
+            {
+                MessageBox.Show("Возраст должен быть числом от 0 до 120");
+                return;
+            }
+            int cell;
+            if (!int.TryParse(textBox4.Text, out cell))
+            {
+                MessageBox.Show("Камера должна быть числом");
+                return;
+            }
+
+            string name = textBox1.Text.Trim();
             DateTime date = dateTimePicker1.Value.Date;
-            string cause = textBox3.Text;
-            int cell = Convert.ToInt32(textBox4.Text);
+            string cause = textBox3.Text.Trim();
 
             if (logic.Add(name, age, date, cause, cell))
             {
@@ -50,18 +61,29 @@ namespace lab1
                 MessageBox.Show("Выбери запись в таблице");
                 return;
             }
-            if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "" || textBox4.Text == "")
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox3.Text) || string.IsNullOrWhiteSpace(textBox4.Text))
             {
                 MessageBox.Show("Заполни все поля");
                 return;
             }
 
+            int age;
+            if (!int.TryParse(textBox2.Text, out age) || age < 0 || age > 120)
+            {
+                MessageBox.Show("Возраст должен быть числом от 0 до 120");
+                return;
+            }
+            int cell;
+            if (!int.TryParse(textBox4.Text, out cell))
+            {
+                MessageBox.Show("Камера должна быть числом");
+                return;
+            }
+
             int id = Convert.ToInt32(textBox5.Text);
-            string name = textBox1.Text;
-            int age = Convert.ToInt32(textBox2.Text);
+            string name = textBox1.Text.Trim();
             DateTime date = dateTimePicker1.Value.Date;
-            string cause = textBox3.Text;
-            int cell = Convert.ToInt32(textBox4.Text);
+            string cause = textBox3.Text.Trim();
 
             if (logic.Edit(id, name, age, date, cause, cell))
             {
