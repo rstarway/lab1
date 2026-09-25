@@ -4,7 +4,17 @@ Logic logic = new Logic();
 
 while (true)
 {
+    Console.Clear();
+    Console.WriteLine("===== Учет поступлений в морг =====");
     Console.WriteLine();
+    List<Record> list = logic.GetAll();
+    if (list.Count == 0)
+        Console.WriteLine("Записей нет");
+    foreach (Record r in list)
+        Console.WriteLine(r.Id + " | " + r.Name + " | " + r.Age + " | " + r.Date.ToShortDateString() + " | " + r.Cause + " | камера " + r.Cell);
+    Console.WriteLine();
+    Console.WriteLine("Свободные камеры: " + string.Join(", ", logic.FreeCells()));
+    Console.WriteLine("===================================");
     Console.WriteLine("1 - добавить");
     Console.WriteLine("2 - показать все");
     Console.WriteLine("3 - изменить");
@@ -156,4 +166,8 @@ while (true)
             Console.WriteLine("Нет такого пункта");
             break;
     }
+
+    Console.WriteLine();
+    Console.Write("Нажми Enter...");
+    Console.ReadLine();
 }

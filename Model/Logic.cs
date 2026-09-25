@@ -4,8 +4,21 @@ namespace Model
     {
         List<Record> list = new List<Record>();
         int next = 1;
+
+        /// <summary>
+        /// Общее количество холодильных камер (номера от 1 до cells).
+        /// </summary>
         public int cells = 10;
 
+        /// <summary>
+        /// Добавляет новую запись о поступлении.
+        /// </summary>
+        /// <param name="name">ФИО</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="date">Дата поступления</param>
+        /// <param name="cause">Причина смерти</param>
+        /// <param name="cell">Номер камеры</param>
+        /// <returns>true, если запись добавлена; false, если камера занята или такой камеры нет.</returns>
         public bool Add(string name, int age, DateTime date, string cause, int cell)
         {
             if (cell < 1 || cell > cells)
@@ -28,11 +41,24 @@ namespace Model
             return true;
         }
 
+        /// <summary>
+        /// Возвращает список всех записей.
+        /// </summary>
         public List<Record> GetAll()
         {
             return list;
         }
 
+        /// <summary>
+        /// Изменяет запись с указанным id.
+        /// </summary>
+        /// <param name="id">Номер изменяемой записи</param>
+        /// <param name="name">ФИО</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="date">Дата поступления</param>
+        /// <param name="cause">Причина смерти</param>
+        /// <param name="cell">Номер камеры</param>
+        /// <returns>true, если запись изменена; false, если записи нет, камера занята другой записью или такой камеры нет.</returns>
         public bool Edit(int id, string name, int age, DateTime date, string cause, int cell)
         {
             if (cell < 1 || cell > cells)
@@ -58,6 +84,11 @@ namespace Model
             return false;
         }
 
+        /// <summary>
+        /// Удаляет запись с указанным id.
+        /// </summary>
+        /// <param name="id">Номер удаляемой записи</param>
+        /// <returns>true, если запись удалена; false, если такой записи нет.</returns>
         public bool Delete(int id)
         {
             for (int i = 0; i < list.Count; i++)
@@ -71,6 +102,11 @@ namespace Model
             return false;
         }
 
+        /// <summary>
+        /// Бизнес-функция 1: поиск записей по причине смерти (часть слова, без учета регистра).
+        /// </summary>
+        /// <param name="cause">Текст для поиска</param>
+        /// <returns>Список найденных записей.</returns>
         public List<Record> FindByCause(string cause)
         {
             List<Record> res = new List<Record>();
@@ -82,6 +118,9 @@ namespace Model
             return res;
         }
 
+        /// <summary>
+        /// Бизнес-функция 2: номера занятых камер по возрастанию.
+        /// </summary>
         public List<int> BusyCells()
         {
             List<int> res = new List<int>();
@@ -91,6 +130,9 @@ namespace Model
             return res;
         }
 
+        /// <summary>
+        /// Бизнес-функция 2: номера свободных камер по возрастанию.
+        /// </summary>
         public List<int> FreeCells()
         {
             List<int> res = new List<int>();
