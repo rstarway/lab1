@@ -16,11 +16,9 @@ while (true)
     Console.WriteLine("Свободные камеры: " + string.Join(", ", logic.FreeCells()));
     Console.WriteLine("===================================");
     Console.WriteLine("1 - добавить");
-    Console.WriteLine("2 - показать все");
-    Console.WriteLine("3 - изменить");
-    Console.WriteLine("4 - удалить");
-    Console.WriteLine("5 - поиск по причине");
-    Console.WriteLine("6 - камеры");
+    Console.WriteLine("2 - изменить");
+    Console.WriteLine("3 - удалить");
+    Console.WriteLine("4 - поиск по причине");
     Console.WriteLine("0 - выход");
     Console.Write("> ");
     string s = Console.ReadLine();
@@ -73,14 +71,6 @@ while (true)
             break;
 
         case "2":
-            List<Record> all = logic.GetAll();
-            if (all.Count == 0)
-                Console.WriteLine("Пусто");
-            foreach (Record r in all)
-                Console.WriteLine(r.Id + " | " + r.Name + " | " + r.Age + " | " + r.Date.ToShortDateString() + " | " + r.Cause + " | камера " + r.Cell);
-            break;
-
-        case "3":
             Console.Write("id: ");
             int id;
             if (!int.TryParse(Console.ReadLine(), out id))
@@ -129,7 +119,7 @@ while (true)
                 Console.WriteLine("Не получилось");
             break;
 
-        case "4":
+        case "3":
             Console.Write("id: ");
             int id2;
             if (!int.TryParse(Console.ReadLine(), out id2))
@@ -143,7 +133,7 @@ while (true)
                 Console.WriteLine("Нет такой записи");
             break;
 
-        case "5":
+        case "4":
             Console.Write("Причина: ");
             string str = Console.ReadLine();
             if (str == null)
@@ -153,13 +143,6 @@ while (true)
                 Console.WriteLine("Ничего не найдено");
             foreach (Record r in res)
                 Console.WriteLine(r.Id + " | " + r.Name + " | " + r.Age + " | " + r.Date.ToShortDateString() + " | " + r.Cause + " | камера " + r.Cell);
-            break;
-
-        case "6":
-            List<int> busy = logic.BusyCells();
-            List<int> free = logic.FreeCells();
-            Console.WriteLine("Занято: " + busy.Count + " (" + string.Join(", ", busy) + ")");
-            Console.WriteLine("Свободно: " + free.Count + " (" + string.Join(", ", free) + ")");
             break;
 
         default:
